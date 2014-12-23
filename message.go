@@ -1,5 +1,7 @@
 package main
 
+import "encoding/json"
+
 // Message represents an individual message for processing by the server or
 // returning to the client.
 //
@@ -16,4 +18,26 @@ type Message struct {
 	// ClientID is an arbitary string to be echoed back with the responses
 	// emitted bythe method call.
 	ClientID string
+}
+
+func (m *Message) MarshalJSON() ([]byte, error) {
+	arr := make([]interface{}, 3)
+	arr[0] = m.Name
+	arr[1] = m.Arguments
+	arr[2] = m.ClientID
+
+	return json.Marshal(arr)
+}
+
+func (m *Message) UnmarshalJSON(j []byte) error {
+	arr := []interface{}{}
+	if err := json.Unmarshal(j, &arr); err != nil {
+		return err
+	}
+
+	m.Name = arr[0].(string)
+	m.Arguments = arr[1]
+	m.ClientID = arr[2].(string)
+
+	return nil
 }
