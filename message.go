@@ -11,9 +11,8 @@ type Message struct {
 	// response being sent to the client.
 	Name string
 
-	// Arguments is an object containing named arguments for the method or
-	// response.
-	Arguments interface{}
+	// Arguments is map containing named arguments for the method or response.
+	Arguments map[string]interface{}
 
 	// ClientID is an arbitary string to be echoed back with the responses
 	// emitted bythe method call.
@@ -36,7 +35,7 @@ func (m *Message) UnmarshalJSON(j []byte) error {
 	}
 
 	m.Name = arr[0].(string)
-	m.Arguments = arr[1]
+	m.Arguments = arr[1].(map[string]interface{})
 	m.ClientID = arr[2].(string)
 
 	return nil
