@@ -40,3 +40,36 @@ func (m *Message) UnmarshalJSON(j []byte) error {
 
 	return nil
 }
+
+// Login provides access to one or multiple accounts.
+type Login struct{}
+
+// Account represents an account on the JMAP server. It provides access to
+// mail, contacts, and calendars.
+//
+// A single login may be used to access multiple accounts.
+//
+// All IDs are only unique within an account. IDs may clash across accounts.
+//
+// http://jmap.io/spec.html#accounts
+type Account struct{}
+
+// MailMessage represents a mail message. A MailMessage is immutable except for
+// the boolean `isXXX` status properties and the set of mailboxes it is in.
+type MailMessage struct {
+	// A unique, immutable ID that does not change if the message changes
+	// mailboxes.
+	ID string
+
+	// Has the email not yet been read?
+	IsUnread bool
+
+	// Has the email been flagged (starred, or pinned)?
+	IsFlagged bool
+
+	// Is the email a draft?
+	IsDraft bool
+
+	// Has the email been answered (replied to)?
+	IsAnswered bool
+}
