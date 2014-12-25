@@ -183,6 +183,23 @@ type Mailbox struct {
 	UnreadThreads int64 `json:"unreadThreads"`
 }
 
+// Thread represents a grouping of replies with the original message. It is
+// simply a flat list of messages, ordered by date. Every message belongs to a
+// thread, even if it's the only message in the thread.
+type Thread struct {
+	// ID identifies the thread.
+	ID string `json:"id"`
+
+	// MessageIDs are the ids of the messages in the thread, sorted such that:
+	//
+	// * Any message with isDraft set to true and an inReplyToMessageId property
+	//   that corresponds to another message in the thread comes immediately
+	//   after that message in the sort order.
+	// * Other than that, everything is sorted in date order (the same as the
+	//   date property on the Message object), oldest first.
+	MessagesIDs []string `json:"messageIds"`
+}
+
 // MailMessage represents a mail message. A MailMessage is immutable except for
 // the boolean `isXXX` status properties and the set of mailboxes it is in.
 type MailMessage struct {
