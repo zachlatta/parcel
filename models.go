@@ -2,11 +2,11 @@ package parcel
 
 import "encoding/json"
 
-// Message represents an individual message for processing by the server or
-// returning to the client.
+// ExchangeMessage represents an individual message for processing by the
+// server or returning to the client.
 //
 // See http://jmap.io/spec.html#the-structure-of-an-exchange
-type Message struct {
+type ExchangeMessage struct {
 	// Name specifies the method to be called on the server or the type of
 	// response being sent to the client.
 	Name string
@@ -19,7 +19,7 @@ type Message struct {
 	ClientID string
 }
 
-func (m *Message) MarshalJSON() ([]byte, error) {
+func (m *ExchangeMessage) MarshalJSON() ([]byte, error) {
 	arr := make([]interface{}, 3)
 	arr[0] = m.Name
 	arr[1] = m.Arguments
@@ -28,7 +28,7 @@ func (m *Message) MarshalJSON() ([]byte, error) {
 	return json.Marshal(arr)
 }
 
-func (m *Message) UnmarshalJSON(j []byte) error {
+func (m *ExchangeMessage) UnmarshalJSON(j []byte) error {
 	arr := []interface{}{}
 	if err := json.Unmarshal(j, &arr); err != nil {
 		return err

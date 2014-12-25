@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-var sampleMsgs = []Message{
-	Message{
+var sampleMsgs = []ExchangeMessage{
+	ExchangeMessage{
 		"method1",
 		map[string]interface{}{
 			"arg1": "arg1data",
@@ -15,14 +15,14 @@ var sampleMsgs = []Message{
 		},
 		"#1",
 	},
-	Message{
+	ExchangeMessage{
 		"method2",
 		map[string]interface{}{
 			"arg1": "arg1data",
 		},
 		"#2",
 	},
-	Message{
+	ExchangeMessage{
 		"method3",
 		map[string]interface{}{},
 		"#3",
@@ -31,7 +31,7 @@ var sampleMsgs = []Message{
 
 var sampleMsgJSON = `[["method1",{"arg1":"arg1data","arg2":"arg2data"},"#1"],["method2",{"arg1":"arg1data"},"#2"],["method3",{},"#3"]]`
 
-func TestMessageMarshalJSON(t *testing.T) {
+func TestExchangeMessageMarshalJSON(t *testing.T) {
 	expected := sampleMsgJSON
 
 	actual, err := json.Marshal(sampleMsgs)
@@ -44,9 +44,9 @@ func TestMessageMarshalJSON(t *testing.T) {
 	}
 }
 
-func TestMessageUnmarshalJSON(t *testing.T) {
+func TestExchangeMessageUnmarshalJSON(t *testing.T) {
 	expected := sampleMsgs
-	actual := []Message{}
+	actual := []ExchangeMessage{}
 
 	if err := json.Unmarshal([]byte(sampleMsgJSON), &actual); err != nil {
 		t.Error(err)
