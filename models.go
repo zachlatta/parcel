@@ -186,6 +186,8 @@ type Mailbox struct {
 // Thread represents a grouping of replies with the original message. It is
 // simply a flat list of messages, ordered by date. Every message belongs to a
 // thread, even if it's the only message in the thread.
+//
+// http://jmap.io/spec.html#threads
 type Thread struct {
 	// ID identifies the thread.
 	ID string `json:"id"`
