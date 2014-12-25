@@ -95,6 +95,94 @@ type Account struct {
 	Capabilities Capabilities `json:"capabilities"`
 }
 
+// Mailbox represents a named set of emails. This is the primary mechanism for
+// organizing messages within an account. It is analogous to a folder in IMAP
+// or a label in other systems. A mailbox may perform a certain role in the
+// system.
+//
+// http://jmap.io/spec.html#mailboxes
+type Mailbox struct {
+	// ID is an immutable identifier for the mailbox.
+	ID string `json:"id"`
+
+	// Name is the user-visible name for the mailbox, e.g. "Inbox". This may be
+	// any UTF-8 string of at least 1 character in length and maximum 256 bytes
+	// in size. Mailboxes may have the same name as a sibling mailbox.
+	Name string `json:"name"`
+
+	// ParentID is the mailbox id for the parent of this mailbox, or nil if this
+	// mailbox is at the top level. Mailboxes form acyclic graphs and, therefore,
+	// must not loop.
+	ParentID *string `json:"parentId"`
+
+	// Role identifies system mailboxes. This property is immutable.
+	//
+	// The following values should be used for the relevant mailboxes:
+	//
+	//     inbox - the mailbox to which new mail is delivered by default, unless
+	//             diverted by a rule or spam filter, etc.
+	//   archive - messages the user does not need right now, but does not wish
+	//             to delete.
+	//    drafts - messages the user is currently writing and are not yet sent.
+	//    outbox - messages the user has finished writing and wishes to send.
+	//      sent - messages the user has sent.
+	//     trash - messages the user has deleted.
+	//      spam - messages considered spam by the server.
+	// templates - drafts which should be used as templates (i.e. used as the
+	//             basis for creating new drafts).
+	//
+	// If the mailbox's role is trash, then it must be treated specially:
+	//
+	//  * Messages in the Trash are ignored when calculating the unreadThreads
+	//    and totalThreads count of other mailboxes.
+	//  * Messages not in the Trash are ignored when calculating the
+	//    unreadThreads and totalThreads count for the Trash folder.
+	Role *string `json:"role"`
+
+	// MustBeOnlyMailbox is whether messages in this mailbox may be in other
+	// mailboxes as well.
+	MustBeOnlyMailbox bool `json:"mustBeOnlyMailbox"`
+
+	// MayAddMessages represents whether the user may add messages to this
+	// mailbox (by either creating a new message or modifying an existing one).
+	MayAddMessages bool `json:"mayAddMessages"`
+
+	// MayRemoveMessages represents whether the user may remove messages from
+	// this mailbox (by either changing the mailboxes of a message or deleting
+	// it).
+	MayRemoveMessages bool `json:"mayRemoveMessages"`
+
+	// MayCreateChlid represents whether the user may create a mailbox with this
+	// mailbox as its parent.
+	MayCreateChild bool `json:"mayCreateChild"`
+
+	// MayRenameMailbox represents whether the user may rename the mailbox or
+	// make it as a child of another mailbox.
+	MayRenameMailbox bool `json:"mayRenameMailbox"`
+
+	// MayDeleteMailbox represents whether the user may delete the mailbox
+	// itself.
+	MayDeleteMailbox bool `json:"mayDeleteMailbox"`
+
+	// TotalMessages is the number of messages in this mailbox.
+	TotalMessages int64 `json:"totalMessages"`
+
+	// UnreadMessages is the number of messages in this mailbox where the
+	// isUnread property of the message is set to true and the isDraft property
+	// is false.
+	UnreadMessages int64 `json:"unreadMessages"`
+
+	// TotalThreads is the number of threads where at least one message in the
+	// thread is in this mailbox.
+	TotalThreads int64 `json:"totalThreads"`
+
+	// UnreadThreads is the number of threads where at least one message in the
+	// thread has the isUnread property set to true and the isDraft property set
+	// to false and at least one message in the thread is in the mailbox. Note,
+	// the unread message does not need to be the one in this mailbox.
+	UnreadThreads int64 `json:"unreadThreads"`
+}
+
 // MailMessage represents a mail message. A MailMessage is immutable except for
 // the boolean `isXXX` status properties and the set of mailboxes it is in.
 type MailMessage struct {
