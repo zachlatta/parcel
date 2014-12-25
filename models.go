@@ -1,4 +1,4 @@
-package main
+package parcel
 
 import "encoding/json"
 
