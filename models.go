@@ -44,6 +44,17 @@ func (m *Message) UnmarshalJSON(j []byte) error {
 // Login provides access to one or multiple accounts.
 type Login struct{}
 
+// Capabilities describes the various capabilities of this server.
+//
+// The spec for this isn't complete and the types of the fields are guessed.
+// See the bottom of http://jmap.io/spec.html#accounts for details.
+type Capabilities struct {
+	DelayedSend          bool  `json:"delayedSend"`
+	MaxSendSize          int64 `json:"maxSendSize"`
+	SupportsMultiMailbox bool  `json:"supportsMultiMailbox"`
+	SupportsThreads      bool  `json:"supportsThreads"`
+}
+
 // Account represents an account on the JMAP server. It provides access to
 // mail, contacts, and calendars.
 //
@@ -52,7 +63,37 @@ type Login struct{}
 // All IDs are only unique within an account. IDs may clash across accounts.
 //
 // http://jmap.io/spec.html#accounts
-type Account struct{}
+type Account struct {
+	// ID uniquely identifies the account.
+	ID string `json:"id"`
+
+	// Name is a user-friendly string to show when presenting content from this
+	// account. e.g. the email address of the account.
+	Name string `json:"name"`
+
+	// IsPrimary is whether the account is the primary account. This must be true
+	// for exactly one of the accounts returned.
+	IsPrimary bool `json:"isPrimary"`
+
+	// IsReadyOnly is true if the user has read-only access to this account. The
+	// user may not use the `set` methods with this account.
+	IsReadOnly bool `json:"isReadOnly"`
+
+	// HasMail represents whether this account contains mail data. Clients may
+	// use the Mail methods with this account.
+	HasMail bool `json:"hasMail"`
+
+	// HasContacts represents whether this account contains contact data. Clients
+	// may use the Contacts methods with this account.
+	HasContacts bool `json:"hasContacts"`
+
+	// HasCalendars represents whether this account contains calendar data.
+	// Clients may use the Calendar methods with this account.
+	HasCalendars bool `json:"hasCalendars"`
+
+	// Capabilities describes the various capabilities of this server.
+	Capabilities Capabilities `json:"capabilities"`
+}
 
 // MailMessage represents a mail message. A MailMessage is immutable except for
 // the boolean `isXXX` status properties and the set of mailboxes it is in.
