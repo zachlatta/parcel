@@ -357,3 +357,22 @@ type Message struct {
 	// discussion: https://groups.google.com/forum/#!msg/jmap-discuss/coEBFDY_A7E/vbIhJFYHCogJ
 	AttachedMessages *map[string]Message `json:"attachedMessages"`
 }
+
+// SearchSnippet represents the relevant portion of a message when searching
+// for messages. e.g. the portion of a message that contains a string I
+// searched for in its body.
+type SearchSnippet struct {
+	// MessageID is the id of the message that the snippet applies to.
+	MessageID string `json:"messageId"`
+
+	// Subject is the HTML-escaped subject of the message with matching
+	// words/phrases wrapped in <b></b> tags, if text from the filter matches the
+	// subject. If it does not match, this is nil.
+	Subject *string `json:"subject"`
+
+	// Preview is the relevant section of the body (converted to plain text if
+	// originally HTML), HTML-escaped, with matching words/phrases wrapped in
+	// <b></b> tags, up to 256 characters long, if text from the filter matches
+	// the plain-text or HTML body. If it does not match, this is nil.
+	Preview *string `json:"preview"`
+}
