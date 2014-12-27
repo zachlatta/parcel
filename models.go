@@ -376,3 +376,16 @@ type SearchSnippet struct {
 	// the plain-text or HTML body. If it does not match, this is nil.
 	Preview *string `json:"preview"`
 }
+
+// ContactGroup represents a named set of contacts.
+//
+// http://jmap.io/spec.html#contact-groups
+type ContactGroup struct {
+	// ID is the id of the group. This is immutable.
+	ID string `json:"id"`
+
+	// Name is the user-visible name for the group, e.g. "Friends". This may be
+	// any UTF-8 string of at least 1 character in length and maximum 256 bytes
+	// in size. The same name may not be used by two different groups.
+	Name string `json:"name"`
+}
