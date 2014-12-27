@@ -361,6 +361,8 @@ type Message struct {
 // SearchSnippet represents the relevant portion of a message when searching
 // for messages. e.g. the portion of a message that contains a string I
 // searched for in its body.
+//
+// http://jmap.io/spec.html#searchsnippets
 type SearchSnippet struct {
 	// MessageID is the id of the message that the snippet applies to.
 	MessageID string `json:"messageId"`
